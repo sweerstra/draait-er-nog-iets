@@ -10,7 +10,7 @@ export default url => {
                 resolve(request.response);
             }
             else {
-                reject(Error('error code:' + request.statusText));
+                reject(Error(`Error: ${request.statusText}`));
             }
         };
 

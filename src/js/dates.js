@@ -1,4 +1,4 @@
-const DATES = {
+const MONTHS = {
     'januari': 'Jan',
     'februari': 'Feb',
     'maart': 'Mar',
@@ -19,7 +19,7 @@ export default titles => {
 
 const parseDateString = str => {
     const parts = str.replace('Vanaf ', '').split(' ');
-    const month = DATES[parts[1]];
+    const month = MONTHS[parts[1]];
 
     return `${month} ${parts[0]}, ${parts[2]}`;
 };
