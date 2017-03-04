@@ -1,5 +1,4 @@
-import request from './js/request';
-import sort from './js/dates'
+import getAvailableTitles from './js/scrape';
 
 const CURRENT_CLASS = 'current';
 const EXPECTING_CLASS = 'expecting';
@@ -10,19 +9,17 @@ const INPUT = document.getElementById('input-user');
 const BUTTON = document.getElementById('btn-control');
 const SPINNER = document.getElementById('spinner');
 const NO_RESULTS = document.getElementById('no-results');
-const EURO_SCRAPE_URL = './src/api/euroscoop_scrape.php';
-const TRAKT_SCRAPE_URL = './src/api/trakt_scrape.php?&user=';
 
 document.addEventListener('DOMContentLoaded', () => {
     INPUT.value = localStorage.getItem(STORAGE_KEY);
-    requestWatchlist(INPUT.value);
+    getAvailableTitles(INPUT.value).then(populate);
 });
 
 BUTTON.addEventListener('click', () => {
     removeChildren(CONTENT);
     setDisplay(NO_RESULTS, false);
     setDisplay(SPINNER, true);
-    requestWatchlist(INPUT.value);
+    getAvailableTitles(INPUT.value).then(populate);
 });
 
 INPUT.addEventListener('keyup', e => {
@@ -31,32 +28,6 @@ INPUT.addEventListener('keyup', e => {
         BUTTON.click();
     }
 });
-
-const requestWatchlist = url => {
-    request(EURO_SCRAPE_URL).then(scrapes => getMatchingTitles(JSON.parse(scrapes), url).then(populate));
-};
-
-const getMatchingTitles = (titles, url) => {
-    return request(TRAKT_SCRAPE_URL + encodeURIComponent(url)).then(response => {
-        const scrapes = JSON.parse(response);
-        const current = [];
-        const expecting = [];
-
-        scrapes.map(({title, poster}) => {
-            if (titles.current.some(val => val.includes(title))) {
-                current.push({title, poster});
-            } else {
-                titles.expecting.forEach(scrape => {
-                    if (scrape.title.includes(title)) {
-                        expecting.push({title, poster, release: scrape.release});
-                    }
-                });
-            }
-        });
-
-        return Promise.all([...current, ...sort(expecting)]);
-    });
-};
 
 const populate = titles => {
     setDisplay(SPINNER, false);
