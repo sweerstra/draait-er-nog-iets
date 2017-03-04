@@ -39,10 +39,10 @@ const populate = titles => {
 
     localStorage.setItem(STORAGE_KEY, INPUT.value);
 
-    titles.forEach(({title, poster, release}) =>
-        appendRow(CONTENT, {title, poster, release}, release
-            ? EXPECTING_CLASS
-            : CURRENT_CLASS));
+    titles.forEach(({title, poster, release}) => {
+        const type = release ? EXPECTING_CLASS : CURRENT_CLASS;
+        appendRow(CONTENT, {title, poster, release}, type);
+    });
 };
 
 const appendRow = (content, {title, poster, release}, type) => {

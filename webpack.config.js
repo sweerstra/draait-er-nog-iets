@@ -3,12 +3,12 @@ var webpack = require('webpack');
 
 module.exports = {
     entry: './src/main.js',
-	
-	output: {
-		path: path.resolve(__dirname, './dist'),
-		publicPath: '/dist/',
-		filename: 'build.js'
-	},
+
+    output: {
+        path: path.resolve(__dirname, './dist'),
+        publicPath: '/dist/',
+        filename: 'build.js'
+    },
 
     module: {
         rules: [
@@ -46,5 +46,5 @@ if (process.env.NODE_ENV === 'production') {
         new webpack.LoaderOptionsPlugin({
             minimize: true
         })
-    ])
+    ]);
 }
