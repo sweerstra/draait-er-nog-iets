@@ -1,9 +1,9 @@
-import getAvailableTitles from './js/scrape';
+import getAvailableTitles from "./js/matching";
 
 const CURRENT_CLASS = 'current';
 const EXPECTING_CLASS = 'expecting';
 const STORAGE_KEY = 'trakt_user';
-const STRING_EMPTY = '';
+const EMPTY_STRING = '';
 const CONTENT = document.getElementById('content');
 const INPUT = document.getElementById('input-user');
 const BUTTON = document.getElementById('btn-control');
@@ -51,7 +51,7 @@ const appendRow = (content, {title, poster, release}, type) => {
     row.innerHTML = `<div class="row ${type}">
                         <span class="title">${title}</span>
                         <img src="${poster}">
-                        <span class="date">${(release || STRING_EMPTY)}</span>
+                        <span class="date">${(release || EMPTY_STRING)}</span>
                      </div>`;
 
     content.appendChild(row);

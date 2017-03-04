@@ -1,10 +1,11 @@
-import request from './request';
-import sort from './dates'
+import request from "./request";
+import sort from "./dates";
 
 const EURO_SCRAPE_URL = './src/api/euroscoop_scrape.php';
 const TRAKT_SCRAPE_URL = './src/api/trakt_scrape.php?&user=';
 
 const getMatchingTitles = (titles, user) => {
+
     return request(TRAKT_SCRAPE_URL + user).then(response => {
         const scrapes = JSON.parse(response);
         const current = [];
@@ -24,6 +25,7 @@ const getMatchingTitles = (titles, user) => {
 
         return Promise.all([...current, ...sort(expecting)]);
     });
+
 };
 
 export default user => request(EURO_SCRAPE_URL).then(scrapes => getMatchingTitles(JSON.parse(scrapes), user));
