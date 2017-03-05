@@ -5,7 +5,7 @@ const MONTHS = {
     'april': 'Apr',
     'mei': 'May',
     'juni': 'Jun',
-    'juli': "Jul",
+    'juli': 'Jul',
     'augustus': 'Aug',
     'september': 'Sep',
     'oktober': 'Oct',

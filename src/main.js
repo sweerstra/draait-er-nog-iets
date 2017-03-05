@@ -39,19 +39,26 @@ const populate = titles => {
 
     localStorage.setItem(STORAGE_KEY, INPUT.value);
 
-    titles.forEach(({title, poster, release}) => {
+    titles.forEach(({title, poster, release, link, reservation = null}) => {
         const type = release ? EXPECTING_CLASS : CURRENT_CLASS;
-        appendRow(CONTENT, {title, poster, release}, type);
+        appendRow(CONTENT, {title, poster, release, link, reservation}, type);
     });
 };
 
-const appendRow = (content, {title, poster, release}, type) => {
+const appendRow = (content, {title, poster, release, link, reservation}, type) => {
     const row = document.createElement('div');
 
     row.innerHTML = `<div class="row ${type}">
                         <span class="title">${title}</span>
-                        <img src="${poster}">
+                        <a href="${link}"><img src="${poster}"></a>
                         <span class="date">${(release || EMPTY_STRING)}</span>
+                        ${reservation
+        ? `<div class="reservation">
+                                    <a href="${reservation}" class="btn-reserve">
+                                        Reserveer
+                                    </a>
+                               </div>`
+        : ''}
                      </div>`;
 
     content.appendChild(row);

@@ -3,29 +3,39 @@ import sort from "./dates";
 
 const EURO_SCRAPE_URL = './src/api/euroscoop_scrape.php';
 const TRAKT_SCRAPE_URL = './src/api/trakt_scrape.php?&user=';
+const TIMELINE_SCRAPE_URL = './src/api/timeline_scrape.php?target=';
 
-const getMatchingTitles = (titles, user) => {
+const getMatchingTitles = ({current, expecting}, username) => {
 
-    return request(TRAKT_SCRAPE_URL + user).then(response => {
+    return request(TRAKT_SCRAPE_URL + username).then(response => {
         const scrapes = JSON.parse(response);
-        const current = [];
-        const expecting = [];
+        const currentMatching = [];
+        const expectingMatching = [];
 
-        scrapes.map(({title, poster}) => {
-            if (titles.current.some(val => val.includes(title))) {
-                current.push({title, poster});
-            } else {
-                titles.expecting.forEach(scrape => {
-                    if (scrape.title.includes(title)) {
-                        expecting.push({title, poster, release: scrape.release});
-                    }
-                });
-            }
+        scrapes.forEach((scrape) => {
+            populateMatching(current, currentMatching, scrape);
+            populateMatching(expecting, expectingMatching, scrape);
         });
 
-        return Promise.all([...current, ...sort(expecting)]);
+        return Promise.all([...addReservationLink(currentMatching), ...sort(expectingMatching)]);
     });
 
+};
+
+const populateMatching = (arr, populate, scrape) => {
+    arr.forEach(({title, release = null, link}) => {
+        if (title.includes(scrape.title)) {
+            populate.push({title, poster: scrape.poster, release, link});
+        }
+    });
+};
+
+const addReservationLink = matching => {
+    return matching.map(({title, poster, release, link}) => {
+        return request(TIMELINE_SCRAPE_URL + encodeURIComponent(link)).then((reservation) => {
+            return {title, poster, release, link, reservation};
+        });
+    });
 };
 
 export default user => request(EURO_SCRAPE_URL).then(scrapes => getMatchingTitles(JSON.parse(scrapes), user));
