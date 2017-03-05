@@ -17,9 +17,7 @@ function download($href) {
     curl_close($curl);
 
     $dom = new simple_html_dom();
-
     $dom->load($str, true, false);
-
     return $dom;
 }
 

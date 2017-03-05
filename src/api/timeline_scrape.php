@@ -23,14 +23,14 @@ foreach($schedules as $schedule) {
 	}
 }
 
-function get_optimized_checkout_link($time, $target) {
-	$timeslots = array_reverse($time['timeslots']);
+function get_optimized_checkout_link($schedule, $target) {
+	$timeslots = array_reverse($schedule['timeslots']);
 	$length = count($timeslots);
 	
 	for ($i = 0; $i < $length; $i++) {
 		foreach($target as $targetSlot) {
 			if($timeslots[$i] === $targetSlot) {
-				return $time['links'][$length - $i - 1];
+				return $schedule['links'][$length - $i - 1];
 			}
 		}
 	}

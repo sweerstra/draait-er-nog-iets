@@ -48,17 +48,18 @@ const populate = titles => {
 const appendRow = (content, {title, poster, release, link, reservation}, type) => {
     const row = document.createElement('div');
 
+    const reservationDiv = reservation ?
+        `<div class="reservation">
+                <a href="${reservation}" class="btn-reserve">
+                    Reserveer
+                </a>
+         </div>` : '';
+
     row.innerHTML = `<div class="row ${type}">
                         <span class="title">${title}</span>
                         <a href="${link}"><img src="${poster}"></a>
                         <span class="date">${(release || EMPTY_STRING)}</span>
-                        ${reservation
-        ? `<div class="reservation">
-                                    <a href="${reservation}" class="btn-reserve">
-                                        Reserveer
-                                    </a>
-                               </div>`
-        : ''}
+                        ${reservationDiv}
                      </div>`;
 
     content.appendChild(row);
