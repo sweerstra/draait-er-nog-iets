@@ -11,27 +11,27 @@ $scheduleData = str_replace('var scheduleData = ', '', $html->find('script', 3)-
 $json = substr($scheduleData, 0, strlen($scheduleData) - 1);
 $schedules = json_decode($json, true);
 
-$targetTimeslots = array('19:00', '19:30', '21:00', '22:00', '22:15');
+$minTargetTime = 1900;
 
 foreach($schedules as $schedule) {
 	$name = $schedule['name'];
 	
 	if(strpos($name, 'vrijdag') !== false ||  strpos($name, 'zaterdag') !== false || strpos($name, 'maandag') !== false) {
-		$link = get_optimized_checkout_link($schedule, $targetTimeslots);
+		$link = get_optimized_checkout_link($schedule, $minTargetTime);
 		echo $link ? create_reservation_link($link) : $targetLink;
 		return;
 	}
 }
 
-function get_optimized_checkout_link($schedule, $target) {
+function get_optimized_checkout_link($schedule, $minTime) {
 	$timeslots = array_reverse($schedule['timeslots']);
 	$length = count($timeslots);
 	
 	for ($i = 0; $i < $length; $i++) {
-		foreach($target as $targetSlot) {
-			if($timeslots[$i] === $targetSlot) {
-				return $schedule['links'][$length - $i - 1];
-			}
+		$timeAsInt = intval(str_replace(':', '', $timeslots[$i]));
+		
+		if($timeAsInt > $minTime)
+			return $schedule['links'][$length - $i - 1];
 		}
 	}
 }

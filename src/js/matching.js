@@ -1,9 +1,9 @@
 import request from "./request";
 import sort from "./dates";
 
-const EURO_SCRAPE_URL = './src/api/euroscoop_scrape.php';
-const TRAKT_SCRAPE_URL = './src/api/trakt_scrape.php?&user=';
-const TIMELINE_SCRAPE_URL = './src/api/timeline_scrape.php?target=';
+const EURO_SCRAPE_URL = 'https://i321720.iris.fhict.nl/draaiternogiets/src/api/euroscoop_scrape.php';
+const TRAKT_SCRAPE_URL = 'https://i321720.iris.fhict.nl/draaiternogiets/src/api/trakt_lists_scrape.php?&user=';
+const TIMELINE_SCRAPE_URL = 'https://i321720.iris.fhict.nl/draaiternogiets/src/api/timeline_scrape.php?target=';
 
 const getMatchingTitles = ({current, expecting}, username) => {
 
@@ -24,16 +24,16 @@ const getMatchingTitles = ({current, expecting}, username) => {
 
 const populateMatching = (arr, populate, scrape) => {
     arr.forEach(({title, release = null, link}) => {
-        if (title.includes(scrape.title)) {
+        if (title.toLowerCase().includes(scrape.title.toLowerCase())) {
             populate.push({title, poster: scrape.poster, release, link});
         }
     });
 };
 
 const addReservationLink = matching => {
-    return matching.map(({title, poster, release, link}) => {
-        return request(TIMELINE_SCRAPE_URL + encodeURIComponent(link)).then((reservation) => {
-            return {title, poster, release, link, reservation};
+    return matching.map((match) => {
+        return request(TIMELINE_SCRAPE_URL + encodeURIComponent(match.link)).then((reservation) => {
+            return Object.assign(match, {reservation});
         });
     });
 };
