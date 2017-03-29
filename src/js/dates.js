@@ -13,12 +13,12 @@ const MONTHS = {
     'december': 'Dec'
 };
 
-const parseDateString = str => {
+const parseDateString = (str) => {
     const [d, m, y] = str.replace('Vanaf ', '').split(' ');
     const month = MONTHS[m];
     return `${month} ${d}, ${y}`;
 };
 
-export default titles => {
+export default (titles) => {
     return titles.sort((a, b) => Date.parse(parseDateString(a.release)) - Date.parse(parseDateString(b.release)));
 };
