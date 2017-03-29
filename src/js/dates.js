@@ -14,10 +14,9 @@ const MONTHS = {
 };
 
 const parseDateString = str => {
-    const parts = str.replace('Vanaf ', '').split(' ');
-    const month = MONTHS[parts[1]];
-
-    return `${month} ${parts[0]}, ${parts[2]}`;
+    const [d, m, y] = str.replace('Vanaf ', '').split(' ');
+    const month = MONTHS[m];
+    return `${month} ${d}, ${y}`;
 };
 
 export default titles => {

@@ -1,13 +1,16 @@
 import request from "./request";
 import sort from "./dates";
 
-const EURO_SCRAPE_URL = 'https://i321720.iris.fhict.nl/draaiternogiets/src/api/euroscoop_scrape.php';
-const TRAKT_SCRAPE_URL = 'https://i321720.iris.fhict.nl/draaiternogiets/src/api/trakt_lists_scrape.php?&user=';
-const TIMELINE_SCRAPE_URL = 'https://i321720.iris.fhict.nl/draaiternogiets/src/api/timeline_scrape.php?target=';
+const EURO_SCRAPE_URL = './src/api/euroscoop_scrape.php';
+const TRAKT_LIST_SCRAPE_URL = './src/api/trakt_lists_scrape.php?&user=';
+const TRAKT_WATCHLIST_SCRAPE_URL = './src/api/trakt_scrape.php?&user=';
+const TIMELINE_SCRAPE_URL = './src/api/euroscoop_schedule_scrape.php?target=';
 
-const getMatchingTitles = ({current, expecting}, username) => {
+const getMatchingTitles = ({current, expecting}, username, list) => {
+    let url = (list == null ? TRAKT_WATCHLIST_SCRAPE_URL : TRAKT_LIST_SCRAPE_URL) + username;
+    url = username && list ? `${url}&name=${list}` : url;
 
-    return request(TRAKT_SCRAPE_URL + username).then(response => {
+    return request(url).then(response => {
         const scrapes = JSON.parse(response);
         const currentMatching = [];
         const expectingMatching = [];
@@ -38,4 +41,6 @@ const addReservationLink = matching => {
     });
 };
 
-export default user => request(EURO_SCRAPE_URL).then(scrapes => getMatchingTitles(JSON.parse(scrapes), user));
+export default (user, list) => request(EURO_SCRAPE_URL).then((scrapes) => {
+    return getMatchingTitles(JSON.parse(scrapes), user, list);
+});

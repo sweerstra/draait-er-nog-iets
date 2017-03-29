@@ -59,15 +59,7 @@ span {
 
 #bar input[type=text] { -webkit-appearance: none; -moz-appearance: none; appearance: none; background: #fff none; border-radius: 4px; border: 1px solid #bfcbd9; box-sizing: border-box; color: #1f2d3d; display: block; font-size: inherit; height: 36px; line-height: 1; outline: none; padding: 3px 10px; transition: border-color .2s cubic-bezier(.645, .045, .355, 1); width: 100% }
 
-#bar input[type=text]::-webkit-input-placeholder { color: #97a8be }
-
-#bar input[type=text]::-moz-placeholder { color: #97a8be }
-
-#bar input[type=text]:-ms-input-placeholder { color: #97a8be }
-
 #bar input[type=text]::placeholder { color: #97a8be }
-
-#bar input[type=text]:hover { border-color: #8391a5 }
 
 #bar input[type=text]:focus { outline: none; border-color: #394EFF }
 
@@ -117,14 +109,33 @@ button { width: 120px; }
     margin: 20px 4% 20px 4%;
 }
 
-#bar input {
+#bar #input-user {
     width: 300px !important;
     display: inline !important;
 }
 
+#bar #input-list {
+    width: 200px !important;
+    display: inline;
+}
+
+#bar label {
+    margin-right: 10px;
+}
+
+#input-list:disabled {
+    cursor: not-allowed !important;
+    background-color: #EBEBE4 !important;
+}
+
 @media (max-width: 502px) {
-    #bar input[type=text] {
+    #bar #input-user, #bar #input-list {
         width: 100% !important;
+        margin-bottom: 10px;
+    }
+
+    #bar #input-list {
+        margin-left: 0;
     }
 
     #bar button {
@@ -134,6 +145,11 @@ button { width: 120px; }
     .current img {
         margin-bottom: 14px;
     }
+}
+
+.checkbox {
+    border: none;
+    background-color: #394EFF;
 }
 
 .row .btn-reserve {
@@ -161,3 +177,62 @@ button { width: 120px; }
     border: 2px solid #394EFF;
 }
 
+[type="checkbox"]:not(:checked),
+[type="checkbox"]:checked {
+    position: absolute;
+    left: -9999px;
+}
+
+[type="checkbox"]:not(:checked) + label,
+[type="checkbox"]:checked + label {
+    position: relative;
+    padding-left: 1.95em;
+    cursor: pointer;
+}
+
+[type="checkbox"]:not(:checked) + label:before,
+[type="checkbox"]:checked + label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1.25em; height: 1.25em;
+    border: 1px solid #394EFF;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, .1);
+}
+
+[type="checkbox"]:not(:checked) + label:after,
+[type="checkbox"]:checked + label:after {
+    content: '✔';
+    position: absolute;
+    top: .1em; left: .3em;
+    font-size: 1.3em;
+    line-height: 0.8;
+    color: #394EFF;
+    transition: all .2s;
+}
+
+/* checked mark aspect changes */
+[type="checkbox"]:not(:checked) + label:after {
+    opacity: 0;
+    transform: scale(0);
+}
+
+[type="checkbox"]:checked + label:after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+[type="checkbox"]:disabled:checked + label:after {
+    color: #999;
+}
+
+[type="checkbox"]:disabled + label {
+    color: #aaa;
+}
+
+label:hover:before {
+    border: 1px solid #394EFF !important;
+}

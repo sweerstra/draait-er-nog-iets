@@ -2,32 +2,46 @@ import getAvailableTitles from "./js/matching";
 
 const CURRENT_CLASS = 'current';
 const EXPECTING_CLASS = 'expecting';
-const STORAGE_KEY = 'trakt_user';
+const USERNAME_STORAGE_KEY = 'trakt_user';
+const WATCHLIST_STORAGE_KEY = 'use_watchlist';
 const EMPTY_STRING = '';
 const CONTENT = document.getElementById('content');
-const INPUT = document.getElementById('input-user');
+const INPUT_USER = document.getElementById('input-user');
+const CHECKBOX = document.getElementById('check');
+const INPUT_LIST = document.getElementById('input-list');
 const BUTTON = document.getElementById('btn-control');
 const SPINNER = document.getElementById('spinner');
 const NO_RESULTS = document.getElementById('no-results');
 
 document.addEventListener('DOMContentLoaded', () => {
-    INPUT.value = localStorage.getItem(STORAGE_KEY);
-    getAvailableTitles(INPUT.value).then(populate);
+    INPUT_USER.value = localStorage.getItem(USERNAME_STORAGE_KEY);
+    initSearch();
 });
 
 BUTTON.addEventListener('click', () => {
     removeChildren(CONTENT);
     setDisplay(NO_RESULTS, false);
     setDisplay(SPINNER, true);
-    getAvailableTitles(INPUT.value).then(populate);
+    initSearch();
 });
 
-INPUT.addEventListener('keyup', e => {
+const submitOnEnter = (e) => {
     e.preventDefault();
     if (e.keyCode === 13) {
         BUTTON.click();
     }
+};
+
+INPUT_USER.addEventListener('keyup', submitOnEnter);
+INPUT_LIST.addEventListener('keyup', submitOnEnter);
+
+CHECKBOX.addEventListener('click', () => {
+    setDisplay(INPUT_LIST, !CHECKBOX.checked, 'inline');
 });
+
+const initSearch = () => {
+    getAvailableTitles(INPUT_USER.value, CHECKBOX.checked ? null : INPUT_LIST.value).then(populate);
+};
 
 const populate = titles => {
     setDisplay(SPINNER, false);
@@ -37,7 +51,8 @@ const populate = titles => {
         return;
     }
 
-    localStorage.setItem(STORAGE_KEY, INPUT.value);
+    localStorage.setItem(USERNAME_STORAGE_KEY, INPUT_USER.value);
+    localStorage.setItem(WATCHLIST_STORAGE_KEY, CHECKBOX.checked);
 
     titles.forEach(({title, poster, release, link, reservation = null}) => {
         const type = release ? EXPECTING_CLASS : CURRENT_CLASS;
@@ -71,6 +86,6 @@ const removeChildren = element => {
     }
 };
 
-const setDisplay = (element, type) => {
-    element.style.display = type ? 'block' : 'none';
+const setDisplay = (element, type, display = 'block') => {
+    element.style.display = type ? display : 'none';
 };

@@ -4,7 +4,8 @@ header("Access-Control-Allow-Origin: *");
 
 include 'simple_html_dom.php';
 
-function download($href) {
+function download($href)
+{
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
     curl_setopt($curl, CURLOPT_HEADER, false);
@@ -31,20 +32,19 @@ $targetType = 'movie';
 
 function starts_with($str, $substr)
 {
-     $length = strlen($substr);
-     return substr($str, 0, $length) === $substr;
+    $length = strlen($substr);
+    return substr($str, 0, $length) === $substr;
 }
 
-foreach($data->find('.grid-item') as $element)
-{
-	$title = $element->find('a.titles-link div.titles h3', 0)->innertext;
-	$poster = $element->find('a div.poster img.real', 0)->getAttribute('data-original') . '.webp';
-	$released = $element->getAttribute('data-released');
-	$type = $element->getAttribute('data-type');
+foreach ($data->find('.grid-item') as $element) {
+    $title = $element->find('a.titles-link div.titles h3', 0)->innertext;
+    $poster = $element->find('a div.poster img.real', 0)->getAttribute('data-original') . '.webp';
+    $released = $element->getAttribute('data-released');
+    $type = $element->getAttribute('data-type');
 
-	if($type === $targetType && starts_with($released, $previousYear) || starts_with($released, $currentYear)) {
-		$items[] = array('title' => $title, 'poster' => $poster);
-	}
+    if ($type === $targetType && starts_with($released, $previousYear) || starts_with($released, $currentYear)) {
+        $items[] = array('title' => $title, 'poster' => $poster);
+    }
 }
 
 echo json_encode($items);
