@@ -3,14 +3,14 @@ import request from "./request";
 import sort from "./dates";
 
 const getMatchingTitles = ({current, expecting}) => {
-    return request(Config.TRAKT_LIST_SCRAPE).then((response) => {
+    return request(Config.TRAKT_SCRAPE).then((response) => {
         const scrapes = JSON.parse(response);
         const currentMatches = [];
         const expectingMatches = [];
 
         scrapes.forEach((scrape) => {
-            populateMatching(current, currentMatches, scrape);
-            populateMatching(expecting, expectingMatches, scrape);
+            match(current, currentMatches, scrape);
+            match(expecting, expectingMatches, scrape);
         });
 
         return Promise.all([...addReservationLink(currentMatches), ...sort(expectingMatches)]);
@@ -18,12 +18,11 @@ const getMatchingTitles = ({current, expecting}) => {
 
 };
 
-const populateMatching = (arr, populate, scrape) => {
+const match = (arr, populate, scrape) => {
     const scrapeTitle = scrape.title.toLowerCase();
     arr.forEach((result) => {
-        const resultTitle = result.title.toLowerCase();
-        if (resultTitle.includes(scrapeTitle)) {
-            populate.push({title: resultTitle, poster: scrape.poster, release: result.release, link: result.link});
+        if (result.title.toLowerCase().includes(scrapeTitle)) {
+            populate.push({title: result.title, poster: scrape.poster, release: result.release, link: result.link});
         }
     });
 };
@@ -38,7 +37,7 @@ const addReservationLink = (matches) => {
 
 export default {
     getAvailableTitles() {
-        return request(Config.EURO_SCRAPE).then((scrapes) => {
+        return request(Config.EUROSCOOP_SCRAPE).then((scrapes) => {
             return getMatchingTitles(JSON.parse(scrapes));
         });
     }

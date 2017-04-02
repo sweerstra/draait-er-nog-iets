@@ -38,19 +38,25 @@ span {
     img {
         width: 100%;
     }
+
+    span {
+        font-size: 22px;
+    }
 }
 
 .current {
     background-color: #394EFF;
     color: white;
     border-bottom: 1px solid white;
+    text-align: center;
 }
 
 .expecting {
+    height: 565px;
     background-color: white;
     color: #394EFF;
     border-bottom: 1px solid #394EFF;
-    height: 565px;
+    text-align: center;
 }
 
 .expecting .btn-reserve {
@@ -76,6 +82,15 @@ button:active { color: #5064ff; border-color: #5064ff; outline: none }
 button::-moz-focus-inner { border: 0 }
 
 button { width: 120px; }
+
+#bar a {
+    color: #394EFF;
+    text-decoration: none;
+}
+
+#bar #refresh {
+    margin-left: 80px;
+}
 
 .el-loading-mask { position: absolute; z-index: 10000; background-color: hsla(0, 0%, 100%, .9); margin: 0; top: 0; right: 0; bottom: 0; left: 0; transition: opacity .3s }
 
@@ -104,6 +119,77 @@ button { width: 120px; }
     50% { stroke-dasharray: 90, 150; stroke-dashoffset: -40px }
     to { stroke-dasharray: 90, 150; stroke-dashoffset: -120px }
 }
+
+/* ----------------- popup ----------------- */
+
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.5);
+    transition: opacity 200ms;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.overlay .cancel {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: default;
+}
+
+.overlay:target {
+    visibility: visible;
+    opacity: 1;
+}
+
+.popup {
+    margin: 75px auto;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #666;
+    width: 50%;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.popup h2 {
+    margin-top: 0;
+    color: #394EFF;
+}
+
+.popup .content {
+    max-height: 400px;
+    overflow: auto;
+}
+
+.popup a {
+    color: #394EFF;
+    text-decoration: none;
+}
+
+.popup .close {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 20px;
+    right: 20px;
+    opacity: 0.8;
+    transition: all 200ms;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #666;
+}
+
+.popup .close:hover {
+    opacity: 1;
+}
+
+/* ----------------- popup ----------------- */
 
 #bar {
     display: flex;

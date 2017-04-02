@@ -4,10 +4,12 @@ import suggestionService from "./js/suggestion";
 const EMPTY_STRING = '';
 const CURRENT_CLASS = 'current';
 const EXPECTING_CLASS = 'expecting';
-const CONTENT = document.getElementById('content');
+const MAIN_CONTENT = document.getElementById('content');
+const SUGGESTION_CONTENT = document.getElementById('suggestion-content');
 const INPUT_SUGGESTION = document.getElementById('input-suggestion');
 const INPUT_IMAGE = document.getElementById('input-img');
 const BUTTON_ADD_SUGGESTION = document.getElementById('btn-add-suggestion');
+const BUTTON_GET_SUGGESTIONS = document.getElementById('suggestions');
 const BUTTON_REFRESH = document.getElementById('refresh');
 const SPINNER = document.getElementById('spinner');
 const NO_RESULTS = document.getElementById('no-results');
@@ -20,7 +22,7 @@ const submitOnEnter = (e) => {
 };
 
 const initializeSearch = () => {
-    titleService.getAvailableTitles(/*INPUT_USER.value*/).then(populate);
+    titleService.getAvailableTitles().then(populate);
 };
 
 const populate = (result) => {
@@ -34,7 +36,7 @@ const populate = (result) => {
     /*{title, poster, release, link, reservation = null}*/
     result.forEach((title) => {
         const type = title.release ? EXPECTING_CLASS : CURRENT_CLASS;
-        appendRow(CONTENT, title, type);
+        appendRow(MAIN_CONTENT, title, type);
     });
 };
 
@@ -58,6 +60,12 @@ const appendRow = (content, {title, poster, release, link, reservation}, type) =
     content.appendChild(row);
 };
 
+const appendSuggestion = (content, {title, poster}) => {
+    const p = document.createElement('p');
+    p.innerHTML = `${title}: <a href="${poster}">Source</a>`;
+    content.appendChild(p);
+};
+
 const removeChildren = (element) => {
     while (element.hasChildNodes()) {
         element.removeChild(element.firstChild);
@@ -68,7 +76,12 @@ const setDisplay = (element, type, display = 'block') => {
     element.style.display = type ? display : 'none';
 };
 
-document.addEventListener('DOMContentLoaded', initializeSearch);
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.location.href.endsWith('#suggestions-popup')) {
+        BUTTON_GET_SUGGESTIONS.click();
+    }
+    initializeSearch();
+});
 
 INPUT_SUGGESTION.addEventListener('keyup', submitOnEnter);
 
@@ -77,16 +90,26 @@ BUTTON_ADD_SUGGESTION.addEventListener('click', () => {
     const poster = INPUT_IMAGE.value;
 
     if (title && poster) {
-        suggestionService.addSuggestion({title, poster}).then((response) => {
+        suggestionService.addSuggestion({title, poster}).then(() => {
             INPUT_SUGGESTION.value = EMPTY_STRING;
             INPUT_IMAGE.value = EMPTY_STRING;
         });
     }
 });
 
+BUTTON_GET_SUGGESTIONS.addEventListener('click', () => {
+    removeChildren(SUGGESTION_CONTENT);
+    suggestionService.getSuggestions().then((response) => {
+        const obj = JSON.parse(response);
+        Object.keys(obj).forEach((key) => {
+            appendSuggestion(SUGGESTION_CONTENT, obj[key])
+        });
+    });
+});
+
 BUTTON_REFRESH.addEventListener('click', (e) => {
     e.preventDefault();
-    removeChildren(CONTENT);
+    removeChildren(MAIN_CONTENT);
     setDisplay(NO_RESULTS, false);
     setDisplay(SPINNER, true);
     initializeSearch();
