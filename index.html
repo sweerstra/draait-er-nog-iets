@@ -13,14 +13,15 @@
     <input id="input-img" type="text" name="img" placeholder="Trakt.tv / image URL" title="img">
     <button id="btn-add-suggestion" style="margin-right: auto;">Toevoegen</button>
     <a href="#suggestions-popup" id="suggestions">Toegevoegd</a>
-    <a href="#" id="refresh">Ververs</a>
+    <a href="#" id="refresh">Herladen</a>
 </div>
 
 <div id="suggestions-popup" class="overlay">
     <div class="popup">
         <h2>Toegevoegd</h2>
         <a class="close" href="#">&times;</a>
-        <div id="suggestion-content"></div>
+        <div id="suggestion-content">
+        </div>
     </div>
 </div>
 
@@ -36,6 +37,7 @@
 
 <div id="content">
 </div>
+
 </body>
 
 <script src="./dist/build.js"></script>

@@ -200,7 +200,7 @@ button { width: 120px; }
 
 #bar #input-suggestion {
     width: 300px !important;
-    display: inline !important;
+    display: inline;
 }
 
 #bar #input-img {
@@ -223,12 +223,8 @@ button { width: 120px; }
         margin-bottom: 10px;
     }
 
-    #bar #input-img {
-        margin-left: 0;
-    }
-
-    #bar button {
-        display: none;
+    #bar button, #bar input {
+        display: none !important;
     }
 
     .current img {
