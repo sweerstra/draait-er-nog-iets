@@ -1,62 +1,40 @@
-import getAvailableTitles from "./js/matching";
+import titleService from "./js/matching";
+import suggestionService from "./js/suggestion";
 
+const EMPTY_STRING = '';
 const CURRENT_CLASS = 'current';
 const EXPECTING_CLASS = 'expecting';
-const USERNAME_STORAGE_KEY = 'trakt_user';
-const WATCHLIST_STORAGE_KEY = 'use_watchlist';
-const EMPTY_STRING = '';
 const CONTENT = document.getElementById('content');
-const INPUT_USER = document.getElementById('input-user');
-const CHECKBOX = document.getElementById('check');
-const INPUT_LIST = document.getElementById('input-list');
-const BUTTON = document.getElementById('btn-control');
+const INPUT_SUGGESTION = document.getElementById('input-suggestion');
+const INPUT_IMAGE = document.getElementById('input-img');
+const BUTTON_ADD_SUGGESTION = document.getElementById('btn-add-suggestion');
+const BUTTON_REFRESH = document.getElementById('refresh');
 const SPINNER = document.getElementById('spinner');
 const NO_RESULTS = document.getElementById('no-results');
-
-document.addEventListener('DOMContentLoaded', () => {
-    INPUT_USER.value = localStorage.getItem(USERNAME_STORAGE_KEY);
-    initSearch();
-});
-
-BUTTON.addEventListener('click', () => {
-    removeChildren(CONTENT);
-    setDisplay(NO_RESULTS, false);
-    setDisplay(SPINNER, true);
-    initSearch();
-});
 
 const submitOnEnter = (e) => {
     e.preventDefault();
     if (e.keyCode === 13) {
-        BUTTON.click();
+        BUTTON_ADD_SUGGESTION.click();
     }
 };
 
-INPUT_USER.addEventListener('keyup', submitOnEnter);
-INPUT_LIST.addEventListener('keyup', submitOnEnter);
-
-CHECKBOX.addEventListener('click', () => {
-    setDisplay(INPUT_LIST, !CHECKBOX.checked, 'inline');
-});
-
-const initSearch = () => {
-    getAvailableTitles(INPUT_USER.value, CHECKBOX.checked ? null : INPUT_LIST.value).then(populate);
+const initializeSearch = () => {
+    titleService.getAvailableTitles(/*INPUT_USER.value*/).then(populate);
 };
 
-const populate = titles => {
+const populate = (result) => {
     setDisplay(SPINNER, false);
 
-    if (titles.length === 0) {
+    if (result.length === 0) {
         setDisplay(NO_RESULTS, true);
         return;
     }
 
-    localStorage.setItem(USERNAME_STORAGE_KEY, INPUT_USER.value);
-    localStorage.setItem(WATCHLIST_STORAGE_KEY, CHECKBOX.checked);
-
-    titles.forEach(({title, poster, release, link, reservation = null}) => {
-        const type = release ? EXPECTING_CLASS : CURRENT_CLASS;
-        appendRow(CONTENT, {title, poster, release, link, reservation}, type);
+    /*{title, poster, release, link, reservation = null}*/
+    result.forEach((title) => {
+        const type = title.release ? EXPECTING_CLASS : CURRENT_CLASS;
+        appendRow(CONTENT, title, type);
     });
 };
 
@@ -80,7 +58,7 @@ const appendRow = (content, {title, poster, release, link, reservation}, type) =
     content.appendChild(row);
 };
 
-const removeChildren = element => {
+const removeChildren = (element) => {
     while (element.hasChildNodes()) {
         element.removeChild(element.firstChild);
     }
@@ -89,3 +67,27 @@ const removeChildren = element => {
 const setDisplay = (element, type, display = 'block') => {
     element.style.display = type ? display : 'none';
 };
+
+document.addEventListener('DOMContentLoaded', initializeSearch);
+
+INPUT_SUGGESTION.addEventListener('keyup', submitOnEnter);
+
+BUTTON_ADD_SUGGESTION.addEventListener('click', () => {
+    const title = INPUT_SUGGESTION.value;
+    const poster = INPUT_IMAGE.value;
+
+    if (title && poster) {
+        suggestionService.addSuggestion({title, poster}).then((response) => {
+            INPUT_SUGGESTION.value = EMPTY_STRING;
+            INPUT_IMAGE.value = EMPTY_STRING;
+        });
+    }
+});
+
+BUTTON_REFRESH.addEventListener('click', (e) => {
+    e.preventDefault();
+    removeChildren(CONTENT);
+    setDisplay(NO_RESULTS, false);
+    setDisplay(SPINNER, true);
+    initializeSearch();
+});

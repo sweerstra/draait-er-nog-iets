@@ -67,7 +67,7 @@ span {
 
 button { display: inline-block; line-height: 1; white-space: nowrap; cursor: pointer; background: #fff; border: 1px solid #bfcbd9; color: #1f2d3d; -webkit-appearance: none; text-align: center; box-sizing: border-box; outline: none; margin: 0; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none; padding: 10px 15px; font-size: 14px; border-radius: 4px }
 
-#bar button + #bar button { margin-left: 10px }
+#bar button + #bar button { margin-left: 10px; }
 
 button:focus, #bar button:hover { color: #394EFF; border-color: #394EFF }
 
@@ -106,16 +106,19 @@ button { width: 120px; }
 }
 
 #bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin: 20px 4% 20px 4%;
 }
 
-#bar #input-user {
+#bar #input-suggestion {
     width: 300px !important;
     display: inline !important;
 }
 
-#bar #input-list {
-    width: 200px !important;
+#bar #input-img {
+    width: 500px !important;
     display: inline;
 }
 
@@ -123,18 +126,18 @@ button { width: 120px; }
     margin-right: 10px;
 }
 
-#input-list:disabled {
+#input-img:disabled {
     cursor: not-allowed !important;
     background-color: #EBEBE4 !important;
 }
 
 @media (max-width: 502px) {
-    #bar #input-user, #bar #input-list {
+    #bar #input-suggestion, #bar #input-img {
         width: 100% !important;
         margin-bottom: 10px;
     }
 
-    #bar #input-list {
+    #bar #input-img {
         margin-left: 0;
     }
 

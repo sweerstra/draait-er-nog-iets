@@ -1,9 +1,9 @@
-export default url => {
+export default (url, method = 'GET', data = null) => {
 
     return new Promise((resolve, reject) => {
 
         let request = new XMLHttpRequest();
-        request.open('GET', url);
+        request.open(method, url);
 
         request.onload = () => {
             if (request.status === 200) {
@@ -14,7 +14,7 @@ export default url => {
             }
         };
 
-        request.send();
+        request.send(JSON.stringify(data));
     });
 
 };
