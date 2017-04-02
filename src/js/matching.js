@@ -18,11 +18,11 @@ const getMatchingTitles = ({current, expecting}) => {
 
 };
 
-const match = (arr, populate, scrape) => {
+const match = (result, toPopulate, scrape) => {
     const scrapeTitle = scrape.title.toLowerCase();
-    arr.forEach((result) => {
+    result.forEach((result) => {
         if (result.title.toLowerCase().includes(scrapeTitle)) {
-            populate.push({title: result.title, poster: scrape.poster, release: result.release, link: result.link});
+            toPopulate.push({title: result.title, poster: scrape.poster, release: result.release, link: result.link});
         }
     });
 };

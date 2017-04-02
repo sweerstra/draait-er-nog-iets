@@ -9,7 +9,7 @@ const Urls = {
     SUGGESTION: 'https://draait-er-nog-iets.firebaseio.com/suggestions.json'
 };
 
-if (true) {
+if (isDevServer) {
     Object.keys(Urls).forEach(key => (Urls[key] = replacePath(Urls[key])));
 }
 
