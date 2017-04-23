@@ -5,15 +5,16 @@ header("Access-Control-Allow-Origin: *");
 include 'simple_html_dom.php';
 
 $currentHTML = file_get_html('https://www.euroscoop.nl/tilburg/films/');
+$current = array();
 
-$current = array_map(function ($val) {
+foreach ($currentHTML->find('.instafilta-target') as $val) {
     $title = $val->find('.titleMobile', 0)->innertext;
     $link = "https://www.euroscoop.nl" . $val->find('a', 0)->href;
 
     if(!strpos($title, '3D')) {
-        return array('title' => $title, 'link' => $link);
+        $current[] = array('title' => $title, 'link' => $link);
     }
-}, $currentHTML->find('.instafilta-target'));
+}
 
 $expectingHTML = file_get_html('https://www.euroscoop.nl/tilburg/films/wordt-verwacht/');
 

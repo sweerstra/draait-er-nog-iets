@@ -1,6 +1,6 @@
 import Config from "../config/index";
 import request from "../data/fetch";
-import sortByDateString from "../utils/sortDateString";
+import sortByDateString from "../utils/sortByDateString";
 
 const getMatchingTitles = ({ current, expecting }) => {
     return request.get(Config.TRAKT_SCRAPE).then((scrapes) => {
@@ -16,12 +16,20 @@ const getMatchingTitles = ({ current, expecting }) => {
     });
 };
 
-const matchWithAvailable = (result, toPopulate, scrape) => {
+const matchWithAvailable = (results, toPopulate, scrape) => {
     const scrapeTitle = scrape.title.toLowerCase();
-    result.forEach((result) => {
+    results.forEach((result) => {
         if (result.title.toLowerCase().includes(scrapeTitle)) {
             toPopulate.push({ title: result.title, poster: scrape.poster, release: result.release, link: result.link });
         }
+    });
+};
+
+const addRottenScores = (matches) => {
+    return matches.map((match) => {
+        return request.get(Config.ROTTEN_SCRAPE + match.title).then((score) => {
+            return Object.assign(match, { score });
+        });
     });
 };
 

@@ -6,10 +6,11 @@ const Urls = {
     EUROSCOOP_SCRAPE: './src/api/euroscoop_scrape.php',
     TRAKT_SCRAPE: './src/api/trakt.php',
     TIMELINE_SCRAPE: './src/api/euroscoop_schedule_scrape.php?target=',
-    SUGGESTIONS: 'https://draait-er-nog-iets.firebaseio.com/suggestions/'
+    SUGGESTIONS: 'https://draait-er-nog-iets.firebaseio.com/suggestions/',
+    ROTTEN_SCRAPE: './src/api/rotten_scrape.php?title='
 };
 
-if (isDevServer) {
+if (true) {
     Object.keys(Urls).forEach(key => (Urls[key] = replacePath(Urls[key])));
 }
 
