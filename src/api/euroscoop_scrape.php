@@ -9,7 +9,10 @@ $currentHTML = file_get_html('https://www.euroscoop.nl/tilburg/films/');
 $current = array_map(function ($val) {
     $title = $val->find('.titleMobile', 0)->innertext;
     $link = "https://www.euroscoop.nl" . $val->find('a', 0)->href;
-    return array('title' => $title, 'link' => $link);
+
+    if(!strpos($title, '3D')) {
+        return array('title' => $title, 'link' => $link);
+    }
 }, $currentHTML->find('.instafilta-target'));
 
 $expectingHTML = file_get_html('https://www.euroscoop.nl/tilburg/films/wordt-verwacht/');
