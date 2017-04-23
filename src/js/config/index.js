@@ -6,7 +6,7 @@ const Urls = {
     EUROSCOOP_SCRAPE: './src/api/euroscoop_scrape.php',
     TRAKT_SCRAPE: './src/api/trakt.php',
     TIMELINE_SCRAPE: './src/api/euroscoop_schedule_scrape.php?target=',
-    SUGGESTION: 'https://draait-er-nog-iets.firebaseio.com/suggestions.json'
+    SUGGESTIONS: 'https://draait-er-nog-iets.firebaseio.com/suggestions/'
 };
 
 if (isDevServer) {

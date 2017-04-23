@@ -90,6 +90,7 @@ button { width: 120px; }
 
 #bar #refresh {
     margin-left: 80px;
+    display: none;
 }
 
 .el-loading-mask { position: absolute; z-index: 10000; background-color: hsla(0, 0%, 100%, .9); margin: 0; top: 0; right: 0; bottom: 0; left: 0; transition: opacity .3s }
@@ -262,62 +263,11 @@ button { width: 120px; }
     border: 2px solid #394EFF;
 }
 
-[type="checkbox"]:not(:checked),
-[type="checkbox"]:checked {
-    position: absolute;
-    left: -9999px;
-}
-
-[type="checkbox"]:not(:checked) + label,
-[type="checkbox"]:checked + label {
-    position: relative;
-    padding-left: 1.95em;
+p a {
     cursor: pointer;
+    float: right;
 }
 
-[type="checkbox"]:not(:checked) + label:before,
-[type="checkbox"]:checked + label:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 1.25em; height: 1.25em;
-    border: 1px solid #394EFF;
-    background: #fff;
-    border-radius: 4px;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, .1);
-}
-
-[type="checkbox"]:not(:checked) + label:after,
-[type="checkbox"]:checked + label:after {
-    content: '✔';
-    position: absolute;
-    top: .1em; left: .3em;
-    font-size: 1.3em;
-    line-height: 0.8;
-    color: #394EFF;
-    transition: all .2s;
-}
-
-/* checked mark aspect changes */
-[type="checkbox"]:not(:checked) + label:after {
-    opacity: 0;
-    transform: scale(0);
-}
-
-[type="checkbox"]:checked + label:after {
-    opacity: 1;
-    transform: scale(1);
-}
-
-[type="checkbox"]:disabled:checked + label:after {
-    color: #999;
-}
-
-[type="checkbox"]:disabled + label {
-    color: #aaa;
-}
-
-label:hover:before {
-    border: 1px solid #394EFF !important;
+p a:nth-child(1) {
+    margin-left: 20px;
 }

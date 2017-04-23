@@ -1,5 +1,6 @@
-import titleService from "./js/matching";
-import suggestionService from "./js/suggestion";
+import getAvailableTitles from "./js/services/match.service";
+import suggestionService from "./js/services/suggestion.service";
+import anchorService from "./js/services/anchor.service";
 
 const EMPTY_STRING = '';
 const CURRENT_CLASS = 'current';
@@ -22,25 +23,25 @@ const submitOnEnter = (e) => {
 };
 
 const initializeSearch = () => {
-    titleService.getAvailableTitles().then(populate);
+    getAvailableTitles().then(populate);
 };
 
 const populate = (result) => {
     setDisplay(SPINNER, false);
+    setDisplay(BUTTON_REFRESH, true);
 
     if (result.length === 0) {
         setDisplay(NO_RESULTS, true);
         return;
     }
 
-    /*{title, poster, release, link, reservation = null}*/
     result.forEach((title) => {
         const type = title.release ? EXPECTING_CLASS : CURRENT_CLASS;
         appendRow(MAIN_CONTENT, title, type);
     });
 };
 
-const appendRow = (content, {title, poster, release, link, reservation}, type) => {
+const appendRow = (content, { title, poster, release, link, reservation }, type) => {
     const row = document.createElement('div');
 
     const reservationDiv = reservation ?
@@ -60,9 +61,21 @@ const appendRow = (content, {title, poster, release, link, reservation}, type) =
     content.appendChild(row);
 };
 
-const appendSuggestion = (content, {title, poster}) => {
+const appendSuggestion = (content, { title, poster }, id) => {
     const p = document.createElement('p');
-    p.innerHTML = `${title}: <a href="${poster}">Source</a>`;
+    p.textContent = title;
+
+    p.appendChild(anchorService.createDeleteAnchor(id, (e) => {
+        if (confirm('Weet je het zeker?')) {
+            const { id, parentNode } = e.target;
+            suggestionService.deleteSuggestion(id).then(() => {
+                parentNode.parentNode.removeChild(parentNode);
+            });
+        }
+    }));
+
+    p.appendChild(anchorService.createSourceAnchor(poster));
+
     content.appendChild(p);
 };
 
@@ -90,7 +103,7 @@ BUTTON_ADD_SUGGESTION.addEventListener('click', () => {
     const poster = INPUT_IMAGE.value;
 
     if (title && poster) {
-        suggestionService.addSuggestion({title, poster}).then(() => {
+        suggestionService.addSuggestion({ title, poster }).then(() => {
             INPUT_SUGGESTION.value = EMPTY_STRING;
             INPUT_IMAGE.value = EMPTY_STRING;
         });
@@ -99,10 +112,9 @@ BUTTON_ADD_SUGGESTION.addEventListener('click', () => {
 
 BUTTON_GET_SUGGESTIONS.addEventListener('click', () => {
     removeChildren(SUGGESTION_CONTENT);
-    suggestionService.getSuggestions().then((response) => {
-        const obj = JSON.parse(response);
+    suggestionService.getSuggestions().then((obj) => {
         Object.keys(obj).forEach((key) => {
-            appendSuggestion(SUGGESTION_CONTENT, obj[key])
+            appendSuggestion(SUGGESTION_CONTENT, obj[key], key);
         });
     });
 });
@@ -112,5 +124,6 @@ BUTTON_REFRESH.addEventListener('click', (e) => {
     removeChildren(MAIN_CONTENT);
     setDisplay(NO_RESULTS, false);
     setDisplay(SPINNER, true);
+    setDisplay(BUTTON_REFRESH, false);
     initializeSearch();
 });
