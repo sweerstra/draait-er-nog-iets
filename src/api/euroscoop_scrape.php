@@ -11,9 +11,7 @@ foreach ($currentHTML->find('.instafilta-target') as $val) {
     $title = $val->find('.titleMobile', 0)->innertext;
     $link = "https://www.euroscoop.nl" . $val->find('a', 0)->href;
 
-    if(!strpos($title, '3D')) {
-        $current[] = array('title' => $title, 'link' => $link);
-    }
+    $current[] = array('title' => $title, 'link' => $link);
 }
 
 $expectingHTML = file_get_html('https://www.euroscoop.nl/tilburg/films/wordt-verwacht/');

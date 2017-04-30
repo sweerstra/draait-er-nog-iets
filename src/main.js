@@ -1,6 +1,8 @@
 import getAvailableTitles from "./js/services/match.service";
 import suggestionService from "./js/services/suggestion.service";
 import anchorService from "./js/services/anchor.service";
+import scrapePoster from "./js/services/scrape.service";
+import Urlparser from "./js/utils/Urlparser";
 
 const EMPTY_STRING = '';
 const CURRENT_CLASS = 'current';
@@ -79,6 +81,14 @@ const appendSuggestion = (content, { title, poster }, id) => {
     content.appendChild(p);
 };
 
+const addSuggestion = (title, poster) => {
+    suggestionService.addSuggestion({ title, poster }).then(() => {
+        INPUT_SUGGESTION.value = EMPTY_STRING;
+        INPUT_IMAGE.value = EMPTY_STRING;
+        setDisplay(SPINNER, false);
+    });
+};
+
 const removeChildren = (element) => {
     while (element.hasChildNodes()) {
         element.removeChild(element.firstChild);
@@ -97,16 +107,23 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 INPUT_SUGGESTION.addEventListener('keyup', submitOnEnter);
+INPUT_IMAGE.addEventListener('keyup', submitOnEnter);
 
 BUTTON_ADD_SUGGESTION.addEventListener('click', () => {
     const title = INPUT_SUGGESTION.value;
-    const poster = INPUT_IMAGE.value;
+    let poster = INPUT_IMAGE.value;
 
     if (title && poster) {
-        suggestionService.addSuggestion({ title, poster }).then(() => {
-            INPUT_SUGGESTION.value = EMPTY_STRING;
-            INPUT_IMAGE.value = EMPTY_STRING;
-        });
+        const parser = new Urlparser(poster);
+        setDisplay(SPINNER, true);
+
+        if (parser.contains('trakt.tv') && parser.containsDotExtension()) {
+            addSuggestion(title, poster);
+        } else {
+            scrapePoster(poster).then((url) => {
+                addSuggestion(title, url);
+            });
+        }
     }
 });
 

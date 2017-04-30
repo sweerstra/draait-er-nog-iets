@@ -25,14 +25,6 @@ const matchWithAvailable = (results, toPopulate, scrape) => {
     });
 };
 
-const addRottenScores = (matches) => {
-    return matches.map((match) => {
-        return request.get(Config.ROTTEN_SCRAPE + match.title).then((score) => {
-            return Object.assign(match, { score });
-        });
-    });
-};
-
 const addReservationLink = (matches) => {
     return matches.map((match) => {
         return request.get(Config.TIMELINE_SCRAPE + encodeURIComponent(match.link)).then((reservation) => {

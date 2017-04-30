@@ -6,8 +6,8 @@ const Urls = {
     EUROSCOOP_SCRAPE: './src/api/euroscoop_scrape.php',
     TRAKT_SCRAPE: './src/api/trakt.php',
     TIMELINE_SCRAPE: './src/api/euroscoop_schedule_scrape.php?target=',
-    SUGGESTIONS: 'https://draait-er-nog-iets.firebaseio.com/suggestions/',
-    ROTTEN_SCRAPE: './src/api/rotten_scrape.php?title='
+    TRAKT_POSTER_SCRAPE: './src/api/trakt_poster.php?target=',
+    SUGGESTIONS: 'https://draait-er-nog-iets.firebaseio.com/suggestions/'
 };
 
 if (true) {
