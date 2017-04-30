@@ -48,7 +48,7 @@ const appendRow = (content, { title, poster, release, link, reservation }, type)
 
     const reservationDiv = reservation ?
         `<div class="reservation">
-                <a href="${reservation}" class="btn-reserve">
+                <a href="${reservation}" target="_blank" class="btn-reserve">
                     Reserveer
                 </a>
          </div>` : '';
@@ -129,10 +129,13 @@ BUTTON_ADD_SUGGESTION.addEventListener('click', () => {
 
 BUTTON_GET_SUGGESTIONS.addEventListener('click', () => {
     removeChildren(SUGGESTION_CONTENT);
+    setDisplay(SPINNER, true);
+
     suggestionService.getSuggestions().then((obj) => {
         Object.keys(obj).forEach((key) => {
             appendSuggestion(SUGGESTION_CONTENT, obj[key], key);
         });
+        setDisplay(SPINNER, false);
     });
 });
 

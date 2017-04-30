@@ -10,7 +10,7 @@ function print_response($schedules, $minTime) {
 
         if (strpos($name, 'vrijdag') !== false || strpos($name, 'zaterdag') !== false || strpos($name, 'maandag') !== false) {
             $link = get_optimized_checkout_link($schedule, $minTime);
-            echo create_reservation_link($link);
+            echo json_encode(create_reservation_link($link));
             return;
         }
     }
@@ -36,7 +36,7 @@ function get_optimized_checkout_link($schedule, $minTime)
 
 function create_reservation_link($url)
 {
-    if (!$url) return '';
+    if (!$url) return 'null';
     $end = end(explode('/', $url));
     return "http://tilburg.euroscoop.nl/Reservation.asp?WCI=templateLogin&WCE=&Vorst={$end}&JAVA=true";
 }
