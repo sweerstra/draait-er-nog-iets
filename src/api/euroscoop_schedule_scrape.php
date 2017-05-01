@@ -4,18 +4,17 @@ header("Access-Control-Allow-Origin: *");
 
 include 'simple_html_dom.php';
 
-function print_response($schedules, $minTime) {
+function get_correct_time_link($schedules, $minTime) {
     foreach ($schedules as $schedule) {
         $name = $schedule['name'];
 
         if (strpos($name, 'vrijdag') !== false || strpos($name, 'zaterdag') !== false || strpos($name, 'maandag') !== false) {
             $link = get_optimized_checkout_link($schedule, $minTime);
-            echo json_encode(create_reservation_link($link));
-            return;
+            return create_reservation_link($link);
         }
     }
 
-    echo 'null';
+    return null;
 }
 
 function get_optimized_checkout_link($schedule, $minTime)
@@ -56,4 +55,4 @@ function get_schedule_script($html)
 $scheduleData = str_replace('var scheduleData = ', '', get_schedule_script(file_get_html($_GET['target'])));
 $json = substr($scheduleData, 0, strlen($scheduleData) - 1);
 
-print_response(json_decode($json, true), 1900);
+echo json_encode(get_correct_time_link(json_decode($json, true), 1900));

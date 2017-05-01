@@ -15,10 +15,11 @@ const MONTHS = {
 
 const parseDateString = (str) => {
     const [d, m, y] = str.replace('Vanaf ', '').split(' ');
-    const month = MONTHS[m];
-    return `${month} ${d}, ${y}`;
+    return `${MONTHS[m]} ${d}, ${y}`;
 };
 
 export default (titles) => {
-    return titles.sort((a, b) => Date.parse(parseDateString(a.release)) - Date.parse(parseDateString(b.release)));
+    return titles.sort((a, b) => {
+        return Date.parse(parseDateString(a.release)) - Date.parse(parseDateString(b.release));
+    });
 };
