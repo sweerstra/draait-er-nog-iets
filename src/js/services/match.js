@@ -2,7 +2,9 @@ import Config from "../config/index";
 import request from "../data/fetch";
 import sortByDateString from "../utils/sortByDateString";
 
-const getMatchingTitles = ({ current, expecting }) => {
+const getMatchingTitles = async({ current, expecting }) => {
+    const scrapes = await request.get(Config.TRAKT_SCRAPE);
+
     return request.get(Config.TRAKT_SCRAPE).then((scrapes) => {
         const currentMatches = [];
         const expectingMatches = [];
@@ -25,11 +27,14 @@ const matchWithAvailable = (results, toPopulate, scrape) => {
     });
 };
 
-const addReservationLink = (matches) => {
+const addReservationLink = async(matches) => {
     return matches.map((match) => {
-        return request.get(Config.TIMELINE_SCRAPE + encodeURIComponent(match.link)).then((reservation) => {
-            return Object.assign(match, { reservation });
-        });
+        const reservation = await request.get(Config.TIMELINE_SCRAPE + encodeURIComponent(match.link));
+        return Object.assign(match, { reservation });
+
+        /* return request.get(Config.TIMELINE_SCRAPE + encodeURIComponent(match.link)).then((reservation) => {
+         return Object.assign(match, { reservation });
+         }); */
     });
 };
 

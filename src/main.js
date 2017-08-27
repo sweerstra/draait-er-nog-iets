@@ -1,7 +1,7 @@
-import getAvailableTitles from "./js/services/match.service";
-import suggestionService from "./js/services/suggestion.service";
-import anchorService from "./js/services/anchor.service";
-import scrapePoster from "./js/services/scrape.service";
+import getAvailableTitles from "./js/services/match";
+import suggestionService from "./js/services/suggestion";
+import anchorService from "./js/utils/anchor";
+import scrapePoster from "./js/services/scrape";
 import Urlparser from "./js/utils/Urlparser";
 
 const EMPTY_STRING = '';

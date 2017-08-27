@@ -1,5 +1,5 @@
 class Fetch {
-    _request(url, options) {
+    async _request(url, options) {
         return fetch(url, options)
             .then(Fetch._checkStatus)
             .then(Fetch._parseResponse)
